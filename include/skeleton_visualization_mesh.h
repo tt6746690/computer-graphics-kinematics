@@ -68,13 +68,18 @@ void skeleton_visualization_mesh(
     int k = 0;
     for(int b = 0;b<skeleton.size();b++)
     {
+      // skip root
       if(skeleton[b].parent_index<0) continue;
+      // parent canonical -> rest transformation
       const Eigen::Affine3d& rTp = skeleton[skeleton[b].parent_index].rest_T;
+      // current canonical -> rest transformation
       const Eigen::Affine3d& rTb = skeleton[b].rest_T;
       const double len = skeleton[b].length;
       Eigen::MatrixXd BVk(BV.rows(),3);
       for(int v = 0;v<BV.rows();v++)
       {
+        // apply rTb first to map from canonical to global space
+        // since forward kinematics is in global space.
         const Eigen::Vector3d p = 
           T[b] * (rTb * Eigen::Vector3d(len*BV(v,0),BV(v,1),BV(v,2)));
         BVk.row(v) = p.transpose();

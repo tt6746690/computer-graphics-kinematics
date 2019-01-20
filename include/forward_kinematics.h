@@ -10,7 +10,7 @@
 // Inputs:
 //   skeleton  transformation hierarchy of #T bones
 // Outputs:
-//   T  #T list of affine transformations
+//   T  #T list of affine transformations in the global coordinate
 void forward_kinematics(
   const Skeleton & skeleton,
   std::vector<Eigen::Affine3d,Eigen::aligned_allocator<Eigen::Affine3d> > & T);

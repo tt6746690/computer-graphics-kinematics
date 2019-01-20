@@ -1,5 +1,7 @@
 #include "linear_blend_skinning.h"
 
+#include <iostream>
+
 void linear_blend_skinning(
   const Eigen::MatrixXd & V,
   const Skeleton & skeleton,
@@ -9,6 +11,21 @@ void linear_blend_skinning(
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code
-  U = V;
+
+  U = Eigen::MatrixXd::Zero(V.rows(), 3);
+
+  int wcol;
+  Eigen::Vector3d vi;
+
+  for (int i = 0; i < V.rows(); ++i) {
+    for (int j = 0; j < skeleton.size(); ++j) {
+      wcol = skeleton[j].weight_index;
+      if (wcol != -1) {
+        vi = V.row(i).transpose();
+        U.row(i) += W(i, wcol) * (T[j] * vi);
+      }
+    }
+  }
+
   /////////////////////////////////////////////////////////////////////////////
 }

@@ -9,7 +9,7 @@
 //
 // Inputs:
 //   keyframes  #keyframes list of pairs of key-times and key-values sorted in
-//     ascending order of key-time
+//     ascending order of key-time (for 1 bone)
 //   t  query time
 // Returns inteprolated value at time t
 Eigen::Vector3d catmull_rom_interpolation(

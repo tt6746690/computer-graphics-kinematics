@@ -18,6 +18,8 @@ else()
   file(GLOB SRCFILES src/*.cpp)
 endif()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
+
 add_executable(${PROJECT_NAME} "main.cpp" ${SRCFILES})
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared/json)
 target_link_libraries(${PROJECT_NAME} igl::core igl::opengl igl::opengl_glfw )

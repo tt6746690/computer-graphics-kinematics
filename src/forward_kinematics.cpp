@@ -8,6 +8,19 @@ void forward_kinematics(
 {
   /////////////////////////////////////////////////////////////////////////////
   // Replace with your code
+
   T.resize(skeleton.size(),Eigen::Affine3d::Identity());
+
+  for (int i = 0; i < skeleton.size(); ++i) {
+    auto bone = skeleton[i];
+    if (bone.parent_index == -1 && bone.weight_index == -1) {
+      // root 
+      T[i] = Eigen::Affine3d::Identity();
+    } else {
+      T[i] = T[bone.parent_index] * bone.rest_T *
+        euler_angles_to_transform(bone.xzx) * bone.rest_T.inverse();
+    }
+  }
+
   /////////////////////////////////////////////////////////////////////////////
 }

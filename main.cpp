@@ -37,6 +37,11 @@ int main(int argc, char * argv[])
   std::vector<std::vector<std::pair<double, Eigen::Vector3d> > > fk_anim;
 
   // read mesh, skeleton and weights
+  // ./kinematics ../data/robot-arm.json
+  // ./kinematics ../data/beast.json
+  // ./kinematics ../data/chimpanzee-hand.json
+  // ./kinematics ../data/ikea-lamp.json
+  // ./kinematics ../data/knight.json
   read_model_and_rig_from_json(
     argc>1?argv[1]:"../data/robot-arm.json",
     V,F,skeleton,W,
