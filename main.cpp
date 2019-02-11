@@ -183,6 +183,10 @@ int main(int argc, char * argv[])
       {
         skeleton[b].xzx = catmull_rom_interpolation( fk_anim[b],anim_t);
       }
+      for(int b = 0;b<skeleton.size();b++) {
+        auto bone = skeleton[b];
+        std::cout<<anim_t<<"|| "<<b<<": "<<bone.xzx<<'\n';
+      }
     }
     update();
     return false;

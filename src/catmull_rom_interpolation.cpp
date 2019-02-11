@@ -1,6 +1,9 @@
 #include "catmull_rom_interpolation.h"
 #include <Eigen/Dense>
 
+#include <iostream>
+#include <cmath>
+
 Eigen::Vector3d catmull_rom_interpolation(
   const std::vector<std::pair<double, Eigen::Vector3d> > & keyframes,
   double t)
@@ -21,16 +24,17 @@ Eigen::Vector3d catmull_rom_interpolation(
 
   // identify which keyframes are used to do interpolation
 
-  std::pair<double, Eigen::Vector3d> p0, p1, p2, p3;
+  using Frame = std::pair<double, Eigen::Vector3d>;
+  Frame p0, p1, p2, p3;
 
   for (int i = 0; i < keyframes.size()-1; ++i) {
-    if (t >= keyframes[i].first && i <= keyframes[i+1].first) {
+    if (t >= keyframes[i].first && t <= keyframes[i+1].first) {
       p1 = keyframes[i];
       p2 = keyframes[i+1];
 
       // duplicate control points for interpolating tangents at endpoints
       p0 = (i == 0) ? 
-        keyframes[0] : keyframes[i-1];
+        keyframes[0]   : keyframes[i-1];
       p3 = (i+2 == keyframes.size()) ?
         keyframes[i+1] : keyframes[i+2];
 
@@ -41,15 +45,20 @@ Eigen::Vector3d catmull_rom_interpolation(
   const auto tangent = [](
     const std::pair<double, Eigen::Vector3d> p1,
     const std::pair<double, Eigen::Vector3d> p2){
-    return (p1.second - p2.second) / (p1.first - p2.first);
+    return (p2.second - p1.second) / (p2.first - p1.first);
   };
 
-  Eigen::Vector3d pt;
-  pt = (1 - 3*t*t + 2*t*t*t) * p1.second + 
-           (3*t*t - 2*t*t*t) * p2.second + 
-         (t - 2*t*t + t*t*t) * tangent(p0, p2) + 
-              (-t*t + t*t*t) * tangent(p1, p3);
+  double t1 = (t - p1.first) / (p2.first - p1.first);
+  double t2 = t1*t1;
+  double t3 = t2*t1;
 
-  return pt;
+  Eigen::Vector3d pt;
+  pt = (1 - 3*t2 + 2*t3) * p1.second + 
+           (3*t2 - 2*t3) * p2.second + 
+        (t1 - 2*t2 + t3) * tangent(p0, p2) + 
+              (-t2 + t3) * tangent(p1, p3);
+
+
+  return C;
   /////////////////////////////////////////////////////////////////////////////
 }
